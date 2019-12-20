@@ -11,4 +11,5 @@ abstract class InterpretadorDeArquivoAbstrata {
 		return arquivo.bytes
 	}
 
+	abstract List<Map<String,String>> obtenhaRegistrosArquivo(String nomeArquivo)
 }
