@@ -5,12 +5,23 @@ class InterpretadorDeArquivoXML extends InterpretadorDeArquivoAbstrata {
 	List<String> tagsDadosItens = []
 	List<String> tagsItens = []
 
-	List<Map<String,String>> obtenhaRegistrosArquivo(String nomeArquivo){
+	Map<GString,List<Map<String,String>>> obtenhaRegistrosArquivo(String nomeArquivo){
 		File arquivo = obtenhaArquivoResource(nomeArquivo)
 		if(!arquivo.name.find('.xml')){
 			return null
 		}
-		criaRegistros(arquivo)
+		List<Map<String,String>> registros = criaRegistros(arquivo)
+		registros = realizaEquivalenciaCampos(registros)
+		registros = agrupeItens(registros)
+		return registros.groupBy {"${it.numeroGuiaPrestadorPrestador}.${it.nomeBeneficiario}.${it.numeroCarteira}"}
+	}
+
+	List<Map<String,String>> realizaEquivalenciaCampos(List<Map<String,String>> registros){
+		registros
+	}
+
+	List<Map<String,String>> agrupeItens(List<Map<String,String>> registros){
+		registros
 	}
 
 	List<Map<String,String>> criaRegistros(File arquivo){

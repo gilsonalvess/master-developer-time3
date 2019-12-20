@@ -33,7 +33,7 @@ class InterpretadorDeArquivosXMLSpec extends Specification {
 		def registros = arquivoXML.obtenhaRegistrosArquivo('arquivos-hopital/faturamento_glosamaxx_2016-02-01_161526_3.02.00.xml')
 		then:
 		registros.toList().size() == 178
-		registros.get(0).size() == 16
+		registros.get(0).size() == 15
 	}
 
 	def "Deve conseguir obeter registros com sucesso arquivo 2"(){
@@ -42,7 +42,7 @@ class InterpretadorDeArquivosXMLSpec extends Specification {
 		def registros = arquivoXML.obtenhaRegistrosArquivo('arquivos-hopital/faturamento_glosamaxx_2016-02-01_161528_3.02.00.xml')
 		then:
 		registros.toList().size() == 252
-		registros.get(0).size() == 16
+		registros.get(0).size() == 15
 	}
 
 	def "Deve conseguir obeter registros com sucesso arquivo 3"(){
@@ -51,7 +51,7 @@ class InterpretadorDeArquivosXMLSpec extends Specification {
 		def registros = arquivoXML.obtenhaRegistrosArquivo('arquivos-hopital/faturamento_glosamaxx_2016-02-02_161566_3.02.00.xml')
 		then:
 		registros.toList().size() == 244
-		registros.get(0).size() == 16
+		registros.get(0).size() == 15
 	}
 
 	def "Deve conseguir obeter registros com sucesso arquivo 4"(){
@@ -60,6 +60,6 @@ class InterpretadorDeArquivosXMLSpec extends Specification {
 		def registros = arquivoXML.obtenhaRegistrosArquivo('arquivos-hopital/faturamento_glosamaxx_2016-02-29_162917_3.02.00.xml')
 		then:
 		registros.toList().size() == 176
-		registros.get(0).size() == 16
+		registros.get(0).size() == 15
 	}
 }
