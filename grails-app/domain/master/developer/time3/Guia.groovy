@@ -12,6 +12,7 @@ abstract class Guia {
 
     static hasMany = [itens: Item]
     static belongsTo = [convenio: Convenio]
+    static hasOne = [guiaAssociada: Guia]
 
     static constraints = {
     }
