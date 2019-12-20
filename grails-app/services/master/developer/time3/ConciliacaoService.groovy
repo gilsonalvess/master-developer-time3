@@ -5,6 +5,25 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class ConciliacaoService {
 
+	final Closure<Boolean> checaIgualdadeDeCodigosEDescricoes = { Item a, Item b ->
+		return a.codigoItem == b.codigoItem && a.codigoTabela == b.codigoTabela && a.descricao == b.descricao
+	}
+
+	final Closure<Boolean> checaIgualdadeDeValores = { Item a, Item b ->
+		return a.valorApresentado == b.valorApresentado && a.valorUnitario == b.valorUnitario
+	}
+
+	final Closure<Boolean> checaIgualdadeDataEQuantidade = { Item a, Item b ->
+		return a.quantidade == b.quantidade && a.dataInicio == b.dataInicio && a.dataFim == b.dataFim
+	}
+
+	final List<Closure<Boolean>> regrasIgualdadeNecessariaParaAssociacaoDeItens = [
+			checaIgualdadeDeCodigosEDescricoes,
+			checaIgualdadeDeValores,
+			checaIgualdadeDataEQuantidade
+	]
+
+
 	void concilieGuias(final List<GuiaHospital> guiasDoHospital, final List<GuiaConvenio> guiasDoConvenio) {
 		List<GuiaHospital> guiasHospitalAssociadas = obtenhaGuiasHospitalSeForemAssociadas(guiasDoHospital, guiasDoConvenio)
 
@@ -51,26 +70,27 @@ class ConciliacaoService {
 		return guiasComDadosDeGuiaSimilares
 	}
 
-	void associeItens(final Set<Item> itensHospital, final Set<Item> itensConvenio) {
-		final Set<Item> itensNaoAssociadosDoHospital = itensHospital.findAll {final Item itemHospital -> !itemHospital.itemAssociado}
-		final Set<Item> itensNaoAssociadosDoConvenio = itensConvenio.findAll {final Item itemConvenio -> !itemConvenio.itemAssociado}
+	Set<Item> associeItens(final GuiaHospital guiaHospitalAssociada) {
+		Set<Item> itensNaoAssociadosDoHospital
+		Set<Item> itensNaoAssociadosDoConvenio
+
+		Set<Item> itensAssociados
+
+		final GuiaConvenio guiaConvenioAssociada = (GuiaConvenio) guiaHospitalAssociada.guiaAssociada
+
+		itensNaoAssociadosDoHospital = guiaHospitalAssociada.itens?.findAll { !it.itemAssociado }
+		itensNaoAssociadosDoConvenio = guiaConvenioAssociada.itens?.findAll { !it.itemAssociado }
+
 
 		for(final Item itemNaoAssociadoHospital in itensNaoAssociadosDoHospital) {
-			final Set<Item> itensConvenioComCodigosEDescricoesIguais = itensNaoAssociadosDoConvenio.findAll {final Item itemConvenio ->
-				if(itemNaoAssociadoHospital.codigoItem == itemConvenio.codigoItem && itemNaoAssociadoHospital.codigoTabela == itemConvenio.codigoTabela) {
-					return itemNaoAssociadoHospital.descricao == itemConvenio.descricao
+			final Set<Item> itensSimilares = itensNaoAssociadosDoConvenio.findAll {final Item itemConvenio ->
+				for(Closure<Boolean> saoIguais in  regrasIgualdadeNecessariaParaAssociacaoDeItens){
+					if( saoIguais(itemNaoAssociadoHospital, itemConvenio) == false){
+						return false
+					}
 				}
 			}
 
-			final Set<Item> itensValoresIguais = itensConvenioComCodigosEDescricoesIguais.findAll {final Item itemConvenio ->
-				return itemNaoAssociadoHospital.valorApresentado == itemConvenio.valorApresentado && itemNaoAssociadoHospital.valorUnitario == itemConvenio.valorUnitario
-			}
-
-			final Set<Item> itensSimilares = itensValoresIguais.findAll {final Item itemSimilarConvenio ->
-				itemNaoAssociadoHospital.quantidade == itemSimilarConvenio.quantidade &&
-						itemNaoAssociadoHospital.dataInicio == itemSimilarConvenio.dataInicio &&
-						itemNaoAssociadoHospital.dataFim == itemSimilarConvenio.dataFim
-			}
 
 			if(itensSimilares.size() == 1) {
 				final Item itemConvenioAssociado = itensSimilares[0]
@@ -78,7 +98,12 @@ class ConciliacaoService {
 				itemConvenioAssociado.itemAssociado = itemNaoAssociadoHospital
 				itemNaoAssociadoHospital.save(failOnError: true)
 				itemConvenioAssociado.save(failOnError: true)
+				itensAssociados.add(itemConvenioAssociado)
 			}
 		}
+
+		return itensAssociados
 	}
+
+
 }
