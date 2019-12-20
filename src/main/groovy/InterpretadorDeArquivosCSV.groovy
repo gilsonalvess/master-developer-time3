@@ -8,13 +8,15 @@ class InterpretadorDeArquivosCSV extends InterpretadorDeArquivoAbstrata {
 
 
 	@Override
-	List<Map<String, String>> obtenhaRegistrosArquivo(String nomeArquivo) {
+	Map<GString,List<Map<String,String>>> obtenhaRegistrosArquivo(String nomeArquivo) {
 		List<String> conteudoCsv = processeConteudoArquivo(nomeArquivo)
 		String header = conteudoCsv.get(0)
 		conteudoCsv.remove(0)
 		List<String> campos = obtenhaCampos(header)
 		List<Map<String, String>> registros = criarRegistros(campos, conteudoCsv)
-		return registros
+		return registros.groupBy {final Map<String, String> registro ->
+			"${registro.matricula}"
+		}
 	}
 
 	static List<String> processeConteudoArquivo(String nomeArquivo) {
