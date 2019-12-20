@@ -6,14 +6,13 @@ class InterpretadorDeArquivosCSV extends InterpretadorDeArquivoAbstrata {
 
 
 	@Override
-	static List<Map<String, String>> obtenhaRegistrosArquivo(String nomeArquivo){
+	List<Map<String, String>> obtenhaRegistrosArquivo(String nomeArquivo) {
 		List<String> conteudoCsv = processeConteudoArquivo(nomeArquivo)
 		String header = conteudoCsv.pop()
 		List<String> campos = obtenhaCampos(header)
 		List<Map<String, String>> registros = criarRegistros(campos, conteudoCsv)
 		return registros
 	}
-
 
 	static List<String> processeConteudoArquivo(String nomeArquivo) {
 		File arquivoResource = obtenhaArquivoResource(nomeArquivo)
