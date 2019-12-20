@@ -5,7 +5,8 @@ class NavegadorGlosaMaxxSpec extends Specification {
         setup:
         NavegadorGlosaMaxx webNavigator = new NavegadorGlosaMaxx()
         when:
-        webNavigator.paginaPrincipal()
+        String caminho = webNavigator.extraiCaminhoPaginaArquivos()
+        webNavigator.extraiCaminhosPagina(caminho)
 
         then:
         true

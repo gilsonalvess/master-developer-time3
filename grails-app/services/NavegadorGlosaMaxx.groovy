@@ -21,17 +21,25 @@ class NavegadorGlosaMaxx {
 
     private extraiHtml(String ){}
 
-    public void paginaPrincipal(){
+    public String extraiCaminhoPaginaArquivos(){
         Map params = [path: '/pagamento-glosamax', contentType: TEXT]
         GPathResult html = obtemPaginaHtmlParseada(params)
 
-        NodeChild controller = html.depthFirst().find{ it.@id == 'controllers'}.depthFirst().find { child -> child.@class == 'controller'}
-        String path = controller.depthFirst().list[0].@href.text()
-        paginaArquivos(path)
+        NodeChild controller = html.depthFirst().find{ it.'@id' == 'controllers'}.depthFirst().find { child -> child.@class == 'controller'}
+        String path = controller.depthFirst().list[0].'@href'.text()
+
+        return path
     }
 
-    public void paginaArquivos(String path){
+    public List<String> extraiCaminhosPagina(String path){
+        GPathResult html = obtemPaginaHtmlParseada([path: path, contentType: TEXT])
+        List<String> paginas = html.depthFirst().find{
+            it.@id == 'list-arquivo'
+        }.children().findAll {
+            it.name() == "A"
+        }.collect{ it.'@href' }
 
+        return paginas
     }
 
 }
