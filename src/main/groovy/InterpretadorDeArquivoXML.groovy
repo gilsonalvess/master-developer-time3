@@ -7,6 +7,9 @@ class InterpretadorDeArquivoXML extends InterpretadorDeArquivoAbstrata {
 
 	List<Map<String,String>> obtenhaRegistrosArquivo(String nomeArquivo){
 		File arquivo = obtenhaArquivoResource(nomeArquivo)
+		if(!arquivo.name.find('.xml')){
+			return null
+		}
 		criaRegistros(arquivo)
 	}
 
