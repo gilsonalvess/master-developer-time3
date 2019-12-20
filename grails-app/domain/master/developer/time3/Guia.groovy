@@ -10,6 +10,7 @@ abstract class Guia {
     String atendimentoRn
     String senha
     Guia guiaAssociada
+    BigDecimal valorTotal
 
     static hasMany = [itens: Item]
     static belongsTo = [convenio: Convenio]
