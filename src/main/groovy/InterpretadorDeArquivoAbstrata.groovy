@@ -1,6 +1,6 @@
 abstract class InterpretadorDeArquivoAbstrata {
 
-	final static String PATH_RESOURCES = '/media/WORK/zeroglosa-workspace/zeroglosa/master-developer-time3/src/main/arquivo-repositorio'
+	final static String PATH_RESOURCES = '/media/WORK/Documentos/master-developer-time3/src/main/arquivo-repositorio/arquivos-convenio/'
 
 	static File obtenhaArquivoResource(String nomeArquivo) {
 		File file = new File("$PATH_RESOURCES/$nomeArquivo")

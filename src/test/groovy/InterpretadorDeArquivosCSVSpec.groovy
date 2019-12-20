@@ -6,6 +6,7 @@ class InterpretadorDeArquivosCSVSpec extends Specification{
 		setup:
 		InterpretadorDeArquivosCSV interpretadorDeArquivosCSV = new InterpretadorDeArquivosCSV()
 		List<Map<String, String>> registros = interpretadorDeArquivosCSV.obtenhaRegistrosArquivo('pagamento_glosamax.csv')
+
 	}
 
 }

@@ -1,5 +1,7 @@
+import com.opencsv.CSVParser
 import com.opencsv.CSVReader
 import groovy.transform.CompileStatic
+import org.hibernate.sql.Alias
 
 @CompileStatic
 class InterpretadorDeArquivosCSV extends InterpretadorDeArquivoAbstrata {
@@ -8,7 +10,8 @@ class InterpretadorDeArquivosCSV extends InterpretadorDeArquivoAbstrata {
 	@Override
 	List<Map<String, String>> obtenhaRegistrosArquivo(String nomeArquivo) {
 		List<String> conteudoCsv = processeConteudoArquivo(nomeArquivo)
-		String header = conteudoCsv.pop()
+		String header = conteudoCsv.get(0)
+		conteudoCsv.remove(0)
 		List<String> campos = obtenhaCampos(header)
 		List<Map<String, String>> registros = criarRegistros(campos, conteudoCsv)
 		return registros
@@ -16,23 +19,21 @@ class InterpretadorDeArquivosCSV extends InterpretadorDeArquivoAbstrata {
 
 	static List<String> processeConteudoArquivo(String nomeArquivo) {
 		File arquivoResource = obtenhaArquivoResource(nomeArquivo)
-		arquivoResource.withReader { reader ->
-			CSVReader csvReader = new CSVReader(reader)
-			List<String[]> csvList = csvReader.readAll()
-			return csvList.collect {it[0]}
-		}
+		String conteudoTexto = arquivoResource.text
+		List<String> conteudoList = conteudoTexto.findAll('(.*\\n)')
+		conteudoList
 	}
 
 	static List<String> obtenhaCampos(String s) {
 		String campos = s.replaceAll('\\s+', '')
-		return campos.split(';') as List<String>
+		return campos.split(',') as List<String>
 	}
 
 	static List<Map<String, String>> criarRegistros (List<String> campos, List<String> conteudo){
 		List<Map<String, String>> registros = []
 
 		for (String linha in conteudo){
-			List<String> valores = linha.split(';') as List<String>
+			List<String> valores = linha.tokenize(',') as List<String>
 			registros << obtenhaItemRegistro(valores, campos)
 		}
 		registros
