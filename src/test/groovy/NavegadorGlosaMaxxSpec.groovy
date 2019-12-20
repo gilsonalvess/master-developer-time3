@@ -1,12 +1,11 @@
 import spock.lang.Specification
 
 class NavegadorGlosaMaxxSpec extends Specification {
-    void "teste webnavigator"(){
+    void "teste navegadorGlosaMaxx"(){
         setup:
-        NavegadorGlosaMaxx webNavigator = new NavegadorGlosaMaxx()
+        NavegadorGlosaMaxx navegadorGlosaMaxx = new NavegadorGlosaMaxx('http://172.22.1.108:8080')
         when:
-        String caminho = webNavigator.extraiCaminhoPaginaArquivos()
-        webNavigator.extraiCaminhosPagina(caminho)
+        navegadorGlosaMaxx.fluxoPagamentosGlosaMaxx()
 
         then:
         true
