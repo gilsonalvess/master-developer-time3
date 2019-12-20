@@ -52,6 +52,7 @@ class InterpretadorArquivoHospital extends InterpretadorDeArquivoXML {
 			registroProcessado.put('valorApresentado', registro.valorTotal)
 			registroProcessado.put('quantidade', registro.quantidadeExecutada)
 			registroProcessado.put('descricaoItem', registro.descricaoProcedimento)
+			registroProcessado.put('Origem', 'Hospital')
 			registrosProcessados.add(registroProcessado)
 		}
 		registrosProcessados
