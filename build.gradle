@@ -31,6 +31,7 @@ repositories {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-logging"
+    compile "org.codehaus.groovy.modules.http-builder:http-builder:0.7.2"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.grails:grails-core"
     compile "org.springframework.boot:spring-boot-starter-actuator"
