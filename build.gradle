@@ -64,6 +64,8 @@ dependencies {
     testRuntime "org.seleniumhq.selenium:selenium-firefox-driver:3.6.0"
     testRuntime "org.seleniumhq.selenium:selenium-remote-driver:3.6.0"
     testRuntime "org.seleniumhq.selenium:selenium-api:3.6.0"
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    compile group: 'stax', name: 'stax', version: '1.2.0'
 }
 
 bootRun {
