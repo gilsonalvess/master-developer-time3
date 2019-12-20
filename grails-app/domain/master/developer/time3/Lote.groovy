@@ -8,6 +8,7 @@ class Lote {
     Long numero
 
     static hasMany = [guias: Guia]
+    static belongsTo = [convenio: Convenio]
 
     static constraints = {
     }
