@@ -1,12 +1,13 @@
 package master.developer.time3
+import java.time.LocalDateTime
 
 import groovy.transform.EqualsAndHashCode
 
 @EqualsAndHashCode
 class Item {
 
-    Date dataInicio
-    Date dataFim
+	LocalDateTime dataInicio
+	LocalDateTime dataFim
     String codigoItem
     String codigoTabela
     BigDecimal valorUnitario = BigDecimal.ZERO
