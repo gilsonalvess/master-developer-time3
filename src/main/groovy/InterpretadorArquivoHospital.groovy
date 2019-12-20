@@ -10,7 +10,24 @@ class InterpretadorArquivoHospital extends InterpretadorDeArquivoXML {
 			'senha',
 			'numeroCarteira',
 			'atendimentoRN',
-			'nomeBeneficiario'
+			'nomeBeneficiario',
+			'valorTotalGeral'
+	]
+
+	List<String> tagsItens = [
+	        'procedimentoExecutado'
+	]
+
+	List<String> tagsDadosItens = [
+	        'dataExecucao',
+			'horaInicial',
+			'horaFinal',
+			'codigoTabela',
+			'codigoProcedimento',
+			'descricaoProcedimento',
+			'quantidadeExecutada',
+			'valorUnitario',
+			'valorTotal'
 	]
 
 }

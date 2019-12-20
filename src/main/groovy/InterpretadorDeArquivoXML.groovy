@@ -2,6 +2,8 @@ class InterpretadorDeArquivoXML extends InterpretadorDeArquivoAbstrata {
 
 	List<String> tagsGuia = []
 	List<String> tagsDadosGuia = []
+	List<String> tagsDadosItens = []
+	List<String> tagsItens = []
 
 	List<Map<String,String>> obtenhaRegistrosArquivo(String nomeArquivo){
 		File arquivo = obtenhaArquivoResource(nomeArquivo)
@@ -16,25 +18,47 @@ class InterpretadorDeArquivoXML extends InterpretadorDeArquivoAbstrata {
 
 	List<Map<String,String>> obtenhaRegistros(String conteudoXML, List<String> tagsBuscadas){
 		List<String> guias = obtenhaConteudoTags(conteudoXML, tagsBuscadas)
-		List<Map<String,String>> dadosGuias = obtenhaDadosGuias(guias, getTagsDadosGuia())
+		List<Map<String,String>> dadosGuias = obtenhaDadosGuias(guias,)
 		dadosGuias
 	}
 
-	List<Map<String,String>> obtenhaDadosGuias(List<String> registrosGuia, List<String> tagsDadosGuia){
+	List<Map<String,String>> obtenhaDadosGuias(List<String> conteudoGuias){
 		List<Map<String,String>> dadosGuias = []
-		for (registroGuia in registrosGuia) {
-			dadosGuias.add(obtenhaDadosGuia(registroGuia,tagsDadosGuia))
+		for (conteudoGuia in conteudoGuias) {
+			Map<String,String> dadoGuia = obtenhaDadosGuia(conteudoGuia)
+			List<Map<String,String>> dadosItens = obtenhaDadosItens(conteudoGuia, dadoGuia)
+			dadosGuias.addAll(dadosItens)
 		}
 		dadosGuias
 	}
 
-	Map<String,String> obtenhaDadosGuia(String registroGuia, List<String> tagsDadosGuia){
+	Map<String,String> obtenhaDadosGuia(String conteudoGuia, List<String> tagsDadosGuia = getTagsDadosGuia()){
 		Map<String,String> dadosGuia = [:]
 		for (String tagAtual in tagsDadosGuia) {
-			String conteudoTag = obtenhaConteudoTag(registroGuia, tagAtual)
+			String conteudoTag = obtenhaConteudoTag(conteudoGuia, tagAtual)
 			dadosGuia.put(tagAtual, conteudoTag)
 		}
 		dadosGuia
+	}
+
+	List<Map<String,String>> obtenhaDadosItens(String conteudoGuia, List<String> tagsItens = getTagsItens(), Map<String,String> dadoGuia){
+		List<Map<String,String>> itens = []
+		List<String> conteudoItens =  obtenhaConteudoTags(conteudoGuia,tagsItens)
+		for (String conteudoItem in conteudoItens) {
+			Map<String,String> dadosItens = obtenhaDadosItem(conteudoItem)
+			dadosItens.putAll(dadoGuia)
+			itens.add(dadosItens)
+		}
+		return itens
+	}
+
+	Map<String,String> obtenhaDadosItem(String conteudoGuia, List<String> tagsDadosGuia = getTagsDadosItens()){
+		Map<String,String> dadosItem = [:]
+		for (String tagAtual in tagsDadosGuia) {
+			String conteudoTag = obtenhaConteudoTag(conteudoGuia, tagAtual)
+			dadosItem.put(tagAtual, conteudoTag)
+		}
+		dadosItem
 	}
 
 	List<String> obtenhaConteudoTags(String conteudoXML, List<String> tagsBuscadas){
