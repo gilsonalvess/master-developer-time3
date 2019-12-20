@@ -30,6 +30,8 @@ class ConciliacaoService {
 				final GuiaConvenio guiaConvenioAssociada = guiasComDadosDeGuiaSimilares.get(0)
 				guiaHospitalNaoAssociada.guiaAssociada = guiaConvenioAssociada
 				guiaConvenioAssociada.guiaAssociada = guiaHospitalNaoAssociada
+				guiaHospitalNaoAssociada.save(failOnError: true)
+				guiaConvenioAssociada.save(failOnError: true)
 				concilieItens(guiaHospitalNaoAssociada.itens, guiaConvenioAssociada.itens)
 			}
 		}

@@ -102,7 +102,11 @@ environments:
     development:
         dataSource:
             dbCreate: create-drop
-            url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            url: jdbc:postgresql://localhost:5432/maratona
+            driverClassName: org.postgresql.Driver
+            username: postgres
+            password: fibo123
+            dialect: org.hibernate.dialect.PostgreSQLDialect
     test:
         dataSource:
             dbCreate: update

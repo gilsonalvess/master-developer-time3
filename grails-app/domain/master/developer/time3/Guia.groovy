@@ -9,10 +9,10 @@ abstract class Guia {
     Long numeroCarteira
     String atendimentoRn
     String senha
+    Guia guiaAssociada
 
     static hasMany = [itens: Item]
     static belongsTo = [convenio: Convenio]
-    static hasOne = [guiaAssociada: Guia]
 
     static constraints = {
     }
