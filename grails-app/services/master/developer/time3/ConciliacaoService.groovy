@@ -32,12 +32,39 @@ class ConciliacaoService {
 				guiaConvenioAssociada.guiaAssociada = guiaHospitalNaoAssociada
 				guiaHospitalNaoAssociada.save(failOnError: true)
 				guiaConvenioAssociada.save(failOnError: true)
-				concilieItens(guiaHospitalNaoAssociada.itens, guiaConvenioAssociada.itens)
+				associeItens(guiaHospitalNaoAssociada.itens, guiaConvenioAssociada.itens)
 			}
 		}
 	}
 
-	void concilieItens(final Set<Item> itensHospital, final Set<Item> itensConvenio) {
+	void associeItens(final Set<Item> itensHospital, final Set<Item> itensConvenio) {
+		final Set<Item> itensNaoAssociadosDoHospital = itensHospital.findAll {final Item itemHospital -> !itemHospital.itemAssociado}
+		final Set<Item> itensNaoAssociadosDoConvenio = itensConvenio.findAll {final Item itemConvenio -> !itemConvenio.itemAssociado}
 
+		for(final Item itemNaoAssociadoHospital in itensNaoAssociadosDoHospital) {
+			final Set<Item> itensConvenioComCodigosEDescricoesIguais = itensNaoAssociadosDoConvenio.findAll {final Item itemConvenio ->
+				if(itemNaoAssociadoHospital.codigoItem == itemConvenio.codigoItem && itemNaoAssociadoHospital.codigoTabela == itemConvenio.codigoTabela) {
+					return itemNaoAssociadoHospital.descricao == itemConvenio.descricao
+				}
+			}
+
+			final Set<Item> itensValoresIguais = itensConvenioComCodigosEDescricoesIguais.findAll {final Item itemConvenio ->
+				return itemNaoAssociadoHospital.valorApresentado == itemConvenio.valorApresentado && itemNaoAssociadoHospital.valorUnitario == itemConvenio.valorUnitario
+			}
+
+			final Set<Item> itensSimilares = itensValoresIguais.findAll {final Item itemSimilarConvenio ->
+				itemNaoAssociadoHospital.quantidade == itemSimilarConvenio.quantidade &&
+						itemNaoAssociadoHospital.dataInicio == itemSimilarConvenio.dataInicio &&
+						itemNaoAssociadoHospital.dataFim == itemSimilarConvenio.dataFim
+			}
+
+			if(itensSimilares.size() == 1) {
+				final Item itemConvenioAssociado = itensSimilares[0]
+				itemNaoAssociadoHospital.itemAssociado = itemConvenioAssociado
+				itemConvenioAssociado.itemAssociado = itemNaoAssociadoHospital
+				itemNaoAssociadoHospital.save(failOnError: true)
+				itemConvenioAssociado.save(failOnError: true)
+			}
+		}
 	}
 }
